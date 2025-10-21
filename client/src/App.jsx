@@ -57,3 +57,27 @@ export default function App() {
     setUser({ id: null, nickname: "", roomCode: "" }); // Reset user state
     setCurrentPage("home"); // Kembali ke home page
   }
+
+  // ==== AHMAD 1 ====================
+
+  // ============================================
+  // RENDER
+  // ============================================
+  return (
+    <div className="app">
+      {/* Tampilkan HomePage jika di halaman "home" */}
+      {currentPage === "home" && (
+        <HomePage socket={socket} onJoin={handleJoin} />
+      )}
+
+      {/* Tampilkan GameRoomPage jika di halaman "game" */}
+      {currentPage === "game" && (
+        <GameRoomPage
+          socket={socket}
+          user={user}
+          onLeaveGame={handleLeaveGame}
+        />
+      )}
+    </div>
+  );
+}
