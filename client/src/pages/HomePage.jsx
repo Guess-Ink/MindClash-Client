@@ -49,4 +49,57 @@ export default function HomePage({ socket, onJoin }) {
     };
     socket.on("joined", onJoined);
   }
+return (
+    <div className="home-page">
+      <div className="home-container">
+        <div className="home-header">
+          <h1>Quiz Game</h1>
+          <p className="tagline">Game quiz multiplayer dengan AI!</p>
+        </div>
+
+        <form className="join-form" onSubmit={handleJoin}>
+          <div className="form-group">
+            <label>Nama Kamu</label>
+            <input
+              type="text"
+              placeholder="Masukkan nickname..."
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              autoComplete="off"
+              autoFocus
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Kode Room (opsional)</label>
+            <input
+              type="text"
+              placeholder="DEFAULT"
+              value={roomCode}
+              onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
+              autoComplete="off"
+            />
+          </div>
+
+          {joinError && <div className="error-message">{joinError}</div>}
+
+          <button type="submit" disabled={!isConnected || !nickname.trim()}>
+            {isConnected ? "Gabung ke Room" : "Menghubungkan..."}
+          </button>
+
+          <div className="info-box">
+            <p>
+              💡 <strong>Tips:</strong>
+            </p>
+            <ul>
+              <li>Maksimal 10 pemain per room</li>
+              <li>Kosongkan kode room untuk join "DEFAULT"</li>
+              <li>Pembuat room akan memilih tema quiz</li>
+              <li>Share kode room untuk main bareng teman!</li>
+            </ul>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 }
