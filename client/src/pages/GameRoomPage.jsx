@@ -18,6 +18,7 @@
  */
 
 import { useEffect, useState } from "react";
+import ThemeToggle from "../components/ThemeToggle";
 import "../styles/GameRoomPage.css";
 
 export default function GameRoomPage({ socket, user, onLeaveGame }) {
@@ -40,6 +41,8 @@ export default function GameRoomPage({ socket, user, onLeaveGame }) {
   const [scoreboard, setScoreboard] = useState([]); // Scoreboard real-time
   const [finalScoreboard, setFinalScoreboard] = useState(null); // Final scoreboard game over
   const [selectedAnswer, setSelectedAnswer] = useState(""); // Jawaban yang dipilih user
+  const [correctAnswer, setCorrectAnswer] = useState(""); // Jawaban yang benar
+  const [showCorrectAnswer, setShowCorrectAnswer] = useState(false); // Show correct answer setelah jawab
   const [feedback, setFeedback] = useState(""); // Feedback message (benar/salah/info)
   const [quizReady, setQuizReady] = useState(false); // Apakah quiz sudah di-generate
   const [isGenerating, setIsGenerating] = useState(false); // Apakah sedang generate quiz
@@ -108,6 +111,8 @@ export default function GameRoomPage({ socket, user, onLeaveGame }) {
       setRound(data); // Update data soal (index, total, question, options)
       setFeedback(""); // Clear feedback
       setSelectedAnswer(""); // Reset selected answer
+      setCorrectAnswer(""); // Reset correct answer
+      setShowCorrectAnswer(false); // Reset show correct answer
       setFinalScoreboard(null); // Clear final scoreboard
     };
 
@@ -118,13 +123,16 @@ export default function GameRoomPage({ socket, user, onLeaveGame }) {
     const onScoreboard = (board) => setScoreboard(board);
 
     // Handler untuk hasil jawaban (benar/salah + poin)
-    const onGuessResult = ({ correct, already, points, elapsedSeconds }) => {
+    const onGuessResult = ({ correct, already, points, elapsedSeconds, correctAnswer: correctAns }) => {
       if (already) {
         setFeedback("Sudah benar di ronde ini "); // Sudah jawab benar sebelumnya
       } else if (correct) {
         setFeedback(`Benar! +${points} poin (${elapsedSeconds}s) `); // Jawaban benar
+        setShowCorrectAnswer(true); // Show correct answer
       } else {
         setFeedback("Salah! Jawabanmu tidak tepat "); // Jawaban salah
+        setCorrectAnswer(correctAns); // Set jawaban yang benar
+        setShowCorrectAnswer(true); // Show correct answer
       }
     };
 
@@ -221,6 +229,7 @@ export default function GameRoomPage({ socket, user, onLeaveGame }) {
           </div>
           <div className="user-info">
             <span>{user.nickname}</span>
+            <ThemeToggle />
           </div>
         </header>
 
@@ -308,6 +317,7 @@ export default function GameRoomPage({ socket, user, onLeaveGame }) {
           <div className="user-info">
             <span>{user.nickname}</span>
             <span className="score">Skor: {myScore}</span>
+            <ThemeToggle />
           </div>
         </header>
 
@@ -359,6 +369,7 @@ export default function GameRoomPage({ socket, user, onLeaveGame }) {
         <div className="user-info">
           <span>{user.nickname}</span>
           <span className="score">Skor: {myScore}</span>
+          <ThemeToggle />
         </div>
       </header>
 
@@ -377,12 +388,32 @@ export default function GameRoomPage({ socket, user, onLeaveGame }) {
           {round.options &&
             round.options.map((option, idx) => {
               const letter = option.charAt(0); // A, B, C, atau D
+              
+              // Determine button class based on answer state
+              let buttonClass = "option-btn";
+              
+              if (showCorrectAnswer) {
+                // Show correct answer in green
+                if (letter === correctAnswer) {
+                  buttonClass += " correct";
+                }
+                // Show selected wrong answer in red
+                if (selectedAnswer === letter && letter !== correctAnswer) {
+                  buttonClass += " wrong";
+                }
+                // Show selected correct answer
+                if (selectedAnswer === letter && letter === correctAnswer) {
+                  buttonClass += " correct selected";
+                }
+              } else if (selectedAnswer === letter) {
+                // Show selected answer before result
+                buttonClass += " selected";
+              }
+              
               return (
                 <button
                   key={idx}
-                  className={`option-btn ${
-                    selectedAnswer === letter ? "selected" : ""
-                  }`}
+                  className={buttonClass}
                   onClick={() => handleAnswerSelect(letter)}
                   disabled={!!selectedAnswer}
                 >

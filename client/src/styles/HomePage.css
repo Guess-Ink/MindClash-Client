@@ -5,21 +5,58 @@
   justify-content: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 20px;
+  transition: background 0.3s ease;
+  position: relative;
+}
+
+/* Light mode gradient */
+:root[data-theme="light"] .home-page {
+  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+}
+
+.theme-toggle-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
 }
 
 .home-container {
-  background: rgba(15, 15, 35, 0.95);
+  background: var(--panel);
   border-radius: 20px;
   padding: 40px;
   max-width: 500px;
   width: 100%;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
 }
 
 .home-header {
   text-align: center;
   margin-bottom: 30px;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 80px;
+  height: 80px;
+  filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.3));
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .home-header h1 {
@@ -32,8 +69,9 @@
 }
 
 .tagline {
-  color: #9ca3af;
+  color: var(--text-secondary);
   font-size: 0.95rem;
+  transition: color 0.3s ease;
 }
 
 .join-form {
@@ -49,17 +87,18 @@
 }
 
 .form-group label {
-  color: #d1d5db;
+  color: var(--text);
   font-weight: 500;
   font-size: 0.9rem;
+  transition: color 0.3s ease;
 }
 
 .form-group input {
   padding: 12px 16px;
   border-radius: 10px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
-  color: #e0e0e0;
+  border: 2px solid var(--border);
+  background: var(--input-bg);
+  color: var(--text);
   font-size: 1rem;
   transition: all 0.3s ease;
 }
@@ -67,12 +106,12 @@
 .form-group input:focus {
   outline: none;
   border-color: #667eea;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--hover);
   box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
 }
 
 .form-group input::placeholder {
-  color: #6b7280;
+  color: var(--muted);
 }
 
 .theme-grid {
@@ -84,9 +123,9 @@
 .theme-button {
   padding: 14px;
   border-radius: 10px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
-  color: #d1d5db;
+  border: 2px solid var(--border);
+  background: var(--input-bg);
+  color: var(--text);
   font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
@@ -157,7 +196,7 @@
 
 .info-box ul {
   list-style: none;
-  color: #9ca3af;
+  color: var(--text-secondary);
   font-size: 0.85rem;
 }
 

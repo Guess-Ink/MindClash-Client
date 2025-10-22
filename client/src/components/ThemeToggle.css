@@ -1,0 +1,44 @@
+/**
+ * ============================================
+ * THEMETOGGLE.CSS - Theme Toggle Button Styles
+ * ============================================
+ */
+
+.theme-toggle-btn {
+  background: var(--panel);
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.1);
+  background: var(--hover);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+/* Smooth rotation animation on click */
+.theme-toggle-btn:active {
+  animation: rotate 0.3s ease;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

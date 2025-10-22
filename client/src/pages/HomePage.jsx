@@ -11,6 +11,7 @@
  */
 
 import { useState, useEffect } from "react";
+import ThemeToggle from "../components/ThemeToggle";
 import "../styles/HomePage.css";
 
 export default function HomePage({ socket, onJoin }) {
@@ -86,9 +87,15 @@ export default function HomePage({ socket, onJoin }) {
 
   return (
     <div className="home-page">
+      <div className="theme-toggle-container">
+        <ThemeToggle />
+      </div>
       <div className="home-container">
         <div className="home-header">
-          <h1>Quiz Game</h1>
+          <div className="logo-container">
+            <img src="/game-ink.svg" alt="Game Ink Logo" className="logo" />
+          </div>
+          <h1>MindClash</h1>
           <p className="tagline">Game quiz multiplayer dengan AI!</p>
         </div>
 
