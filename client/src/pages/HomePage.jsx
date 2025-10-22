@@ -1,3 +1,15 @@
+/**
+ * ============================================
+ * HOMEPAGE.JSX - Landing Page Component
+ * ============================================
+ * Halaman awal untuk user input nickname dan room code
+ * Fitur:
+ * - Form input nickname (required)
+ * - Form input room code (optional, default "DEFAULT")
+ * - Connection status indicator
+ * - Error handling untuk join room
+ */
+
 import { useState, useEffect } from "react";
 import "../styles/HomePage.css";
 
@@ -10,7 +22,6 @@ export default function HomePage({ socket, onJoin }) {
   const [joinError, setJoinError] = useState(""); // Error message saat join gagal
   const [isConnected, setIsConnected] = useState(false); // Status koneksi socket
 
-//   ===== FAWWAZ 1 ==========================
 
   // ============================================
   // SOCKET EVENT LISTENERS
@@ -42,8 +53,6 @@ export default function HomePage({ socket, onJoin }) {
     };
   }, [socket]);
 
-//   ===== FAWWAZ 2 ==========================
-
   // ============================================
   // HANDLER: JOIN ROOM
   // ============================================
@@ -74,52 +83,59 @@ export default function HomePage({ socket, onJoin }) {
     socket.on("joined", onJoined);
   }
 
-  if (gameEnded && finalScoreboard) {
-    return (
-      <div className="game-room-page">
-        <header className="room-header">
-          <div className="room-info">
-            <span className="room-label">Room:</span>
-            <span className="room-code">{user.roomCode}</span>
-          </div>
-          <div className="user-info">
-            <span>{user.nickname}</span>
-            <span className="score">Skor: {myScore}</span>
-          </div>
-        </header>
 
-        <div className="game-over-screen">
-          <h2>🏆 Hasil Akhir</h2>
+  return (
+    <div className="home-page">
+      <div className="home-container">
+        <div className="home-header">
+          <h1>Quiz Game</h1>
+          <p className="tagline">Game quiz multiplayer dengan AI!</p>
+        </div>
 
-          <div className="final-leaderboard">
+        <form className="join-form" onSubmit={handleJoin}>
+          <div className="form-group">
+            <label>Nama Kamu</label>
+            <input
+              type="text"
+              placeholder="Masukkan nickname..."
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              autoComplete="off"
+              autoFocus
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Kode Room (opsional)</label>
+            <input
+              type="text"
+              placeholder="DEFAULT"
+              value={roomCode}
+              onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
+              autoComplete="off"
+            />
+          </div>
+
+          {joinError && <div className="error-message">{joinError}</div>}
+
+          <button type="submit" disabled={!isConnected || !nickname.trim()}>
+            {isConnected ? "Gabung ke Room" : "Menghubungkan..."}
+          </button>
+
+          <div className="info-box">
+            <p>
+              💡 <strong>Tips:</strong>
+            </p>
             <ul>
-              {finalScoreboard.map((p, idx) => (
-                <li
-                  key={p.id}
-                  className={`rank-${idx + 1} ${p.id === user.id ? "me" : ""}`}
-                >
-                  <span className="rank">#{idx + 1}</span>
-                  <span className="name">{p.nickname}</span>
-                  <span className="points">{p.score} poin</span>
-                </li>
-              ))}
+              <li>Maksimal 10 pemain per room</li>
+              <li>Kosongkan kode room untuk join "DEFAULT"</li>
+              <li>Pembuat room akan memilih tema quiz</li>
+              <li>Share kode room untuk main bareng teman!</li>
             </ul>
           </div>
-
-          <div className="game-over-buttons">
-            <button className="play-again-btn" onClick={handlePlayAgain}>
-              Main Lagi
-            </button>
-            <button className="leave-game-btn" onClick={onLeaveGame}>
-              Selesai
-            </button>
-          </div>
-
-          <p className="play-again-note">
-            Semua pemain akan kembali ke waiting room setelah klik "Main Lagi".
-          </p>
-        </div>
+        </form>
       </div>
-    );
-  }
+    </div>
+  );
 }
+
