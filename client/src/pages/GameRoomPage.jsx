@@ -56,8 +56,6 @@ export default function GameRoomPage({ socket, user, onLeaveGame }) {
     { value: "IPA", label: "🔬 Ilmu Pengetahuan Alam" },
   ];
 
-  // WELDY 1  ====================
-
   // ============================================
   // SOCKET EVENT LISTENERS
   // ============================================
@@ -112,8 +110,6 @@ export default function GameRoomPage({ socket, user, onLeaveGame }) {
       setSelectedAnswer(""); // Reset selected answer
       setFinalScoreboard(null); // Clear final scoreboard
     };
-
-    // WELDY 2  ====================
 
     // Handler untuk update countdown timer
     const onTimer = (sec) => setTimer(sec);
@@ -173,8 +169,6 @@ export default function GameRoomPage({ socket, user, onLeaveGame }) {
     };
   }, [socket]);
 
-// RAHMAD 2  ====================
-
   // ============================================
   // COMPUTED VALUES
   // ============================================
@@ -212,8 +206,6 @@ export default function GameRoomPage({ socket, user, onLeaveGame }) {
       socket.emit("guess", { answer }); // Kirim jawaban ke server
     }
   }
-
-  // FAWAWAZ 1  ====================
 
   // ============================================
   // RENDER: WAITING ROOM
@@ -301,8 +293,6 @@ export default function GameRoomPage({ socket, user, onLeaveGame }) {
     );
   }
 
-  // FAWWAZ 2  ====================
-
   // ============================================
   // RENDER: GAME OVER
   // ============================================
@@ -355,3 +345,67 @@ export default function GameRoomPage({ socket, user, onLeaveGame }) {
       </div>
     );
   }
+  // ============================================
+  // RENDER: PLAYING GAME
+  // ============================================
+  // Tampilan saat game sedang berjalan (soal + timer + options)
+  return (
+    <div className="game-room-page">
+      <header className="room-header">
+        <div className="room-info">
+          <span className="room-label">Room:</span>
+          <span className="room-code">{user.roomCode}</span>
+        </div>
+        <div className="user-info">
+          <span>{user.nickname}</span>
+          <span className="score">Skor: {myScore}</span>
+        </div>
+      </header>
+
+      <main className="game-play">
+        <div className="question-area">
+          <div className="round-info">
+            Soal {round.index}/{round.total}
+          </div>
+          <div className="question-display">
+            <p className="question-text">{round.question}</p>
+          </div>
+          <div className="timer-display">⏱️ {timer}s</div>
+        </div>
+
+        <div className="options-grid">
+          {round.options &&
+            round.options.map((option, idx) => {
+              const letter = option.charAt(0); // A, B, C, atau D
+              return (
+                <button
+                  key={idx}
+                  className={`option-btn ${
+                    selectedAnswer === letter ? "selected" : ""
+                  }`}
+                  onClick={() => handleAnswerSelect(letter)}
+                  disabled={!!selectedAnswer}
+                >
+                  {option}
+                </button>
+              );
+            })}
+        </div>
+
+        <div className="feedback-area">{feedback}</div>
+
+        <section className="scoreboard-section">
+          <h3>Papan Skor Sementara</h3>
+          <ul>
+            {scoreboard.map((p) => (
+              <li key={p.id} className={p.id === user.id ? "me" : ""}>
+                <span className="name">{p.nickname}</span>
+                <span className="pts">{p.score}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </main>
+    </div>
+  );
+}
