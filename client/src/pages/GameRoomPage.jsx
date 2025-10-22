@@ -103,3 +103,19 @@ export default function GameRoomPage({ socket, user, onLeaveGame }) {
     socket.on("scoreboard", onScoreboard);
     socket.on("guessResult", onGuessResult);
     socket.on("gameOver", onGameOver);
+
+    socket.emit("requestState");
+
+    return () => {
+      socket.off("playersState", onPlayersState);
+      socket.off("themeSet", onThemeSet);
+      socket.off("generatingQuiz", onGeneratingQuiz);
+      socket.off("quizReady", onQuizReady);
+      socket.off("gameStarting", onGameStarting);
+      socket.off("round", onRound);
+      socket.off("timer", onTimer);
+      socket.off("scoreboard", onScoreboard);
+      socket.off("guessResult", onGuessResult);
+      socket.off("gameOver", onGameOver);
+    };
+  }, [socket]);
