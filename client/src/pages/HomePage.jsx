@@ -73,4 +73,53 @@ export default function HomePage({ socket, onJoin }) {
     };
     socket.on("joined", onJoined);
   }
+
+  if (gameEnded && finalScoreboard) {
+    return (
+      <div className="game-room-page">
+        <header className="room-header">
+          <div className="room-info">
+            <span className="room-label">Room:</span>
+            <span className="room-code">{user.roomCode}</span>
+          </div>
+          <div className="user-info">
+            <span>{user.nickname}</span>
+            <span className="score">Skor: {myScore}</span>
+          </div>
+        </header>
+
+        <div className="game-over-screen">
+          <h2>🏆 Hasil Akhir</h2>
+
+          <div className="final-leaderboard">
+            <ul>
+              {finalScoreboard.map((p, idx) => (
+                <li
+                  key={p.id}
+                  className={`rank-${idx + 1} ${p.id === user.id ? "me" : ""}`}
+                >
+                  <span className="rank">#{idx + 1}</span>
+                  <span className="name">{p.nickname}</span>
+                  <span className="points">{p.score} poin</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="game-over-buttons">
+            <button className="play-again-btn" onClick={handlePlayAgain}>
+              Main Lagi
+            </button>
+            <button className="leave-game-btn" onClick={onLeaveGame}>
+              Selesai
+            </button>
+          </div>
+
+          <p className="play-again-note">
+            Semua pemain akan kembali ke waiting room setelah klik "Main Lagi".
+          </p>
+        </div>
+      </div>
+    );
+  }
 }
